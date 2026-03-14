@@ -9,13 +9,13 @@ const options = {
   },
 };
 
-export const getTrendingMovies = async () => {
-  const res = await fetch(`${API_BASE_URL}/trending/movie/day?language=vi`, options);
+export const getTrendingMovies = async (page = 1) => {
+  const res = await fetch(`${API_BASE_URL}/trending/movie/day?language=vi&page=${page}`, options);
   return res.json();
 };
 
-export const getTopRatedMovies = async () => {
-  const res = await fetch(`${API_BASE_URL}/movie/top_rated?language=vi`, options);
+export const getTopRatedMovies = async (page = 1) => {
+  const res = await fetch(`${API_BASE_URL}/movie/top_rated?language=vi&page=${page}`, options);
   return res.json();
 };
 
@@ -36,6 +36,11 @@ export const searchMovies = async (query) => {
 
 export const getMovieDetails = async (movieId) => {
   const res = await fetch(`${API_BASE_URL}/movie/${movieId}?language=vi`, options);
+  return res.json();
+};
+
+export const getMovieTrailer = async (movieId) => {
+  const res = await fetch(`${API_BASE_URL}/movie/${movieId}/videos?language=en-US`, options);
   return res.json();
 };
 

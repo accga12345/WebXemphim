@@ -1,6 +1,7 @@
 import { createContext, useState } from "react";
 import Modal from "react-modal";
 import YouTube from "react-youtube";
+import { getMovieTrailer } from "../services/movieService";
 
 const MovieContext = createContext();
 
@@ -17,21 +18,8 @@ const MovieProvider = ({ children }) => {
   const [modalIsOpen, setIsOpen] = useState(false);
 
   const handleVideoTrailer = async (movieId) => {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
-      },
-    };
-
     try {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`,
-        options
-      );
-
-      const data = await response.json();
+      const data = await getMovieTrailer(movieId);
       setTrailerUrl(data.results[0]?.key);
       setIsOpen(true);
     } catch (error) {

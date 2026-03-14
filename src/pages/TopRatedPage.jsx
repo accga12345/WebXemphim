@@ -1,5 +1,6 @@
 import { useState } from "react";
 import MovieItem from "../components/MovieItem";
+import { getTopRatedMovies } from "../services/movieService";
 
 const TopRatedPage = ({ topRatedMovies, favorites, onToggleFavorite }) => {
   const [movies, setMovies] = useState(topRatedMovies || []);
@@ -12,18 +13,8 @@ const TopRatedPage = ({ topRatedMovies, favorites, onToggleFavorite }) => {
     setLoading(true);
     const nextPage = page + 1;
 
-    const url = `https://api.themoviedb.org/3/movie/top_rated?language=vi&page=${nextPage}`;
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
-      },
-    };
-
     try {
-      const response = await fetch(url, options);
-      const data = await response.json();
+      const data = await getTopRatedMovies(nextPage);
       const results = data.results || [];
       setMovies((prev) => [...prev, ...results]);
       setPage(nextPage);
