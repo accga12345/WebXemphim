@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import MovieList from "../components/MovieList";
 
 const FavoritesPage = ({ favorites, onToggleFavorite }) => {
@@ -18,11 +17,6 @@ const FavoritesPage = ({ favorites, onToggleFavorite }) => {
       onToggleFavorite={onToggleFavorite}
     />
   );
-};
-
-FavoritesPage.propTypes = {
-  favorites: PropTypes.array,
-  onToggleFavorite: PropTypes.func,
 };
 
 export default FavoritesPage;

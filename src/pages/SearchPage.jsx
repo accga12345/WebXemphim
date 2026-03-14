@@ -20,6 +20,5 @@ const SearchPage = ({ searchData, favorites, onToggleFavorite }) => {
   );
 };
 
-
 export default SearchPage;
 

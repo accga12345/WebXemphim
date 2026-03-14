@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Header from "./components/Header";
 import { MovieProvider } from "./context/MovieDetailContext";
+import { getAllHomeData, searchMovies } from "./services/movieService";
 import routes from "./routes";
 
 function App() {
@@ -42,22 +43,13 @@ function App() {
   };
 
   const handleSearch = async (value) => {
-    const url = `https://api.themoviedb.org/3/search/movie?query=${value}&include_adult=false&language=vi&page=1`;
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
-      },
-    };
     if (value === "") {
       setSearchData([]);
       navigate("/");
       return;
     }
     try {
-      const response = await fetch(url, options);
-      const data = await response.json();
+      const data = await searchMovies(value);
       setSearchData(data.results || []);
       navigate("/search");
     } catch (error) {
@@ -67,28 +59,11 @@ function App() {
 
   useEffect(() => {
     (async function () {
-      const urls = [
-        "https://api.themoviedb.org/3/trending/movie/day?language=vi",
-        "https://api.themoviedb.org/3/movie/top_rated?language=vi",
-        "https://api.themoviedb.org/3/movie/now_playing?language=vi&page=1",
-      ];
-      const options = {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
-        },
-      };
-      const fetchMovies = async (url) => {
-        return await fetch(url, options).then((response) => response.json());
-      };
-
       try {
-        const response = await Promise.all(urls.map(fetchMovies));
-
-        setTrendingMovies(response[0].results);
-        setTopRatedMovies(response[1].results);
-        setNowPlayingMovies(response[2].results || []);
+        const data = await getAllHomeData();
+        setTrendingMovies(data.trendingMovies);
+        setTopRatedMovies(data.topRatedMovies);
+        setNowPlayingMovies(data.nowPlayingMovies);
       } catch (error) {
         console.log(error);
       }
